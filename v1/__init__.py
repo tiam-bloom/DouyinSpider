@@ -43,7 +43,7 @@ class ReqUserAwemePost:
             ('time_list_query', '0'),
             ('whale_cut_token', ''),
             ('cut_version', '1'),
-            ('count', '12'),  # 每次请求的数量
+            ('count', '32'),  # 每次请求的数量
             ('publish_video_strategy_type', '2'),
             ('pc_client_type', '1'),
             ('version_code', '170400'),
@@ -88,7 +88,7 @@ class ReqUserAwemePost:
         if response.status_code == 200 and len(response.text) > 0:
             # 保存json文件做备份
             date = datetime.datetime.fromtimestamp(int(max_cursor) / 1000).strftime('%Y-%m-%d')
-            self.downloader.save_json_file(response.json(), date)
+            self.downloader.save_json_file(response.json(), date+'-'+max_cursor+'.json')
             return response.json()
 
     def req_user_aweme_post(self):

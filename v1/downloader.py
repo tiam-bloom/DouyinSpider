@@ -5,6 +5,7 @@
 # @Project : DouyinSpider
 import json
 import os
+import re
 
 import requests
 # import logging
@@ -21,7 +22,7 @@ def legalize_file_name(file_name):
     # 文件名中不能有特殊字符, 替换掉
     file_name = file_name.replace('/', '').replace('\\', '').replace(':', '').replace('*', '').replace('?', '')
     # 长度限制
-    file_name = file_name[:250]
+    file_name = file_name[:50]
     return file_name
 
 
@@ -45,6 +46,27 @@ class Downloader:
         self.index = 0
         pass
 
+    def download_image(self, url, file_name=f'{gen_random_str(10)}.jpeg'):
+        """
+        下载图片
+        :param url: 图片地址
+        :param file_name: 默认随机10位字符串
+        :return:
+        """
+        Downloader.all_counts += 1
+        print(f'\n{Downloader.all_counts}: 开始下载图片: ', file_name)
+        r = requests.get(url, stream=True)
+        path = self.save_dir_path + file_name
+        with open(path, 'wb') as f:
+            total_length = int(r.headers.get('content-length'))
+            print('图片大小:{:.2f}KB'.format(total_length / 8 / 1024))
+            for chunk in r.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+                # 打印进度条
+                print('\r' + '[下载进度]:%s%.2f%%' % (
+                    '>' * int((f.tell() / total_length) * 50), float(f.tell() / total_length) * 100), end='')
+
     def download_video(self, url, file_name=f'{gen_random_str(10)}.mp4'):
         """
         下载视频
@@ -54,13 +76,12 @@ class Downloader:
         """
         Downloader.all_counts += 1
         # 规范文件名
-        file_name = legalize_file_name(file_name)
         print(f'\n{Downloader.all_counts}: 开始下载视频: ', file_name)
         r = requests.get(url, stream=True)
         path = self.save_dir_path + file_name
         with open(path, 'wb') as f:
             total_length = int(r.headers.get('content-length'))
-            print(f'视频大小:{total_length / 8 / 1024 / 1024}MB', )
+            print('视频大小:{:.2f}MB'.format(total_length / 8 / 1024 / 1024))
             for chunk in r.iter_content(chunk_size=1024 * 1024):
                 if chunk:
                     f.write(chunk)
@@ -75,27 +96,57 @@ class Downloader:
         :return:
         """
         aweme_list = json_data['aweme_list']
+        # 遍历每一个视频数据
         for aweme in aweme_list:
-            video_url_list = aweme['video']['play_addr']['url_list']
-            video_name = aweme['desc']
-            # 文件名中不能有特殊字符, 替换掉
-            video_name = video_name.replace('/', '').replace('\\', '').replace(':', '').replace('*', '').replace('?',
-                                                                                                                 '')
-            # 长度限制
-            video_name = video_name[:50]
-            # 一个视频有三个地址, 成功一个就OK
-            for video_url in video_url_list:
+            file_name = legalize_file_name(aweme['desc'])
+            # 视频值为null
+            image_list = aweme['images']
+            if image_list is not None:
                 self.index += 1
-                # print(video_url)
-                try:
-                    self.download_video(video_url, f'{self.index}-{video_name}.mp4')
-                    break
-                except Exception as e:
-                    Downloader.err_counts += 1
-                    print('下载失败', e)
-                    print(f'{Downloader.err_counts}、{self.index}-{video_name}:{video_url}\n')
-                    # with open('../data/error.log', 'a', encoding='utf-8') as log:
-                    #     log.write(f'{Downloader.err_counts}、{self.index}-{video_name}:{video_url}\n')
+                # 图文下载
+
+                index = 0
+                # 一个图片不创建文件夹
+                if len(image_list) > 1:
+                    # 创建存储照片的文件夹
+                    if not os.path.exists(self.save_dir_path + f'{self.index}-' + file_name + os.path.sep):
+                        os.makedirs(self.save_dir_path + f'{self.index}-' + file_name + os.path.sep)
+                for image in image_list:
+                    index += 1
+                    # (?<=\.)(\w+)(?=\?)
+                    # download_url_list 有抖音水印
+                    url_list = image['url_list']
+                    # 最后一个url一定是jpeg格式吗?
+                    url = url_list[3]
+                    # for url in url_list:
+                    #     # 正则匹配文件后缀
+                    #     file_type = re.search(r'\.(\w+)(?=\?)', url).group(0)
+                    #     # 规范文件名
+                    #     file_name = legalize_file_name(file_name)
+                    try:
+                        self.download_image(url, f'{self.index}-'+file_name + os.path.sep + f'{index}-{gen_random_str(10)}.jpeg' if len(
+                            image_list) > 1 else f'{self.index}-{file_name}.jpeg')
+                    except Exception as e:
+                        Downloader.err_counts += 1
+                        print('下载失败', e)
+                        print(f'{Downloader.err_counts}、{self.index}-{file_name}:{url}\n')
+            else:
+                # 视频下载
+                video_url_list = aweme['video']['play_addr']['url_list']
+                # 文件名中不能有特殊字符, 替换掉
+                # 一个视频有三个地址, 成功一个就OK
+                for video_url in video_url_list:
+                    self.index += 1
+                    # print(video_url)
+                    try:
+                        self.download_video(video_url, f'{self.index}-{file_name}.mp4')
+                        break
+                    except Exception as e:
+                        Downloader.err_counts += 1
+                        print('下载失败', e)
+                        print(f'{Downloader.err_counts}、{self.index}-{file_name}:{video_url}\n')
+                        # with open('../data/error.log', 'a', encoding='utf-8') as log:
+                        #     log.write(f'{Downloader.err_counts}、{self.index}-{video_name}:{video_url}\n')
 
     def save_json_file(self, json_data, file_name=f'{gen_random_str(10)}.json'):
         """

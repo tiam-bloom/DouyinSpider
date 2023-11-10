@@ -78,4 +78,7 @@ step4: 重新组成url, 发起请求, 获取数据
 - 使用FFmpeg获取视频信息
 - https://jeremylee.sh/bins/
 - https://pypi.org/project/python-ffmpeg/
-- 图文下载?
+
+- 图文下载? 图文"images"字段不为null, 一张图4个地址; 视频url变为mp3
+
+- 下载个人喜欢的视频/收藏夹
