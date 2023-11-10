@@ -69,3 +69,13 @@ step1: 获取一个接口curl
 step2: 修改入参count等, 获取更多数据
 step3: 通过三方工具生成X-bogus参数等
 step4: 重新组成url, 发起请求, 获取数据
+
+
+## todo
+
+- 完善日志
+- 完全视频下载统计
+- 使用FFmpeg获取视频信息
+- https://jeremylee.sh/bins/
+- https://pypi.org/project/python-ffmpeg/
+- 图文下载?

@@ -12,6 +12,8 @@ from urllib.parse import urlencode
 import requests
 from v1.signature import Signature
 from v1.downloader import Downloader
+
+
 # import logging
 
 # logging.basicConfig(level=logging.DEBUG)
@@ -113,23 +115,30 @@ class ReqUserAwemePost:
                 break
             max_cursor = str(res['max_cursor'])
             need_time_list = '0'
-        print('视频总数: %d', video_counts)
+        print('视频总数: ', video_counts)
         return user_aweme_post_json_list
 
 
-def save_user_video(url):
+def save_user_video(sec_user_id):
     # 获取sec_user_id
-    sec_user_id = url.split('/')[-1]
     req = ReqUserAwemePost(sec_user_id)
     post_json_list = req.req_user_aweme_post()
     # 保存视频
     downloader_ = Downloader(f'\\data\\{sec_user_id}\\')
+    need = 20
+    index = 0
     for post_json in post_json_list:
+        index += 1
+        if index > need:
+            break
         downloader_.save_video_batch(post_json)
+    print('---------------统计-----------------')
+    print("共下载视频次数", Downloader.all_counts)
+    print("失败次数", Downloader.err_counts)
 
 
 def main():
-    # 获取用户输入
+    # 获取用户输入 todo 优化输入
     print(
         "请输入用户主页链接, 比如: https://www.douyin.com/user/MS4wLjABAAAACV5Em110SiusElwKlIpUd-MRSi8rBYyg0NfpPrqZmykHY8wLPQ8O4pv3wPL6A-oz")
     while True:
@@ -137,16 +146,17 @@ def main():
         # 检查输入
         if url is None or len(url) == 0:
             print('输入为空, 请重新输入')
-        if url == 'q':
+        elif url == 'q':
             print('退出')
             exit(0)
         # 正则匹配
-        elif re.fullmatch(r"https://www.douyin.com/user/[\w-]+", url) is None:
-            print('输入格式错误, 请不要携带参数等')
+        elif re.search(r'(?<=https://www.douyin.com/user/)[\w-]+', url) is None:
+            print(r'输入格式错误, 格式应匹配正则: (?<=https://www.douyin.com/user/)[\w-]+ 可匹配到sec_user_id')
         else:
             break
-    save_user_video(url)
+    sec_user_id = re.search(r'(?<=https://www.douyin.com/user/)[\w-]+', url).group()
+    print('输入正确, 开始下载', sec_user_id)
+    save_user_video(sec_user_id)
 
 
-# https://www.douyin.com/user/MS4wLjABAAAABHH6yC5Niqrc3qRWiKVlmyKF3vxIe_sUfzrdEDn4LMNZKbr7vL3ycfXOoYWNEiIV
 main()

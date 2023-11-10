@@ -12,6 +12,19 @@ import requests
 from v1.signature import gen_random_str
 
 
+def legalize_file_name(file_name):
+    """
+    规范文件名
+    :param file_name:
+    :return:
+    """
+    # 文件名中不能有特殊字符, 替换掉
+    file_name = file_name.replace('/', '').replace('\\', '').replace(':', '').replace('*', '').replace('?', '')
+    # 长度限制
+    file_name = file_name[:250]
+    return file_name
+
+
 # 文件夹层级 /user_id/视频文件
 # 文件夹层级 /user_id/年份/视频文件
 # 文件夹层级 /user_id/分页/视频文件
@@ -40,6 +53,8 @@ class Downloader:
         :return:
         """
         Downloader.all_counts += 1
+        # 规范文件名
+        file_name = legalize_file_name(file_name)
         print(f'\n{Downloader.all_counts}: 开始下载视频: ', file_name)
         r = requests.get(url, stream=True)
         path = self.save_dir_path + file_name
@@ -68,9 +83,9 @@ class Downloader:
                                                                                                                  '')
             # 长度限制
             video_name = video_name[:50]
-            self.index += 1
             # 一个视频有三个地址, 成功一个就OK
             for video_url in video_url_list:
+                self.index += 1
                 # print(video_url)
                 try:
                     self.download_video(video_url, f'{self.index}-{video_name}.mp4')
