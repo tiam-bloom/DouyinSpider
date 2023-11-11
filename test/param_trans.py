@@ -7,6 +7,8 @@
 import requests
 from urllib.parse import quote
 
+print(1 if 1 > 0 else 0)
+
 url = "https://example.com/api"
 params = {"key": "value with = sign"}
 

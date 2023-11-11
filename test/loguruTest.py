@@ -11,7 +11,12 @@ logger.add("log/debug1.log", rotation="500 MB", retention="10 days", level="DEBU
 logger.add("log/info.log", rotation="500 MB", retention="10 days", level="INFO", enqueue=True, encoding="utf-8")
 logger.add("log/warning.log", rotation="500 MB", retention="10 days", level="WARNING", enqueue=True, encoding="utf-8")
 
-logger.info("Start print log")
+a = {
+    "a": 1,
+    "b": 2
+}
+
+logger.info("Start print {} log", a)
 logger.debug("Do something")
 logger.warning("Something maybe fail.")
 logger.info("Finish")
