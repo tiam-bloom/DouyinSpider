@@ -43,3 +43,5 @@ if __name__ == '__main__':
 # 硝子: https://www.douyin.com/user/MS4wLjABAAAAz5T3wByqOvoXvrPbSQm1etY2ZVMXfazRgA07EjfmqHw?enter_from=personal_homepage&enter_method=follow_list&is_search=0&list_name=follow&nt=1&tab_name=follow_lish
 # frontend_store: https://www.douyin.com/user/MS4wLjABAAAAgowPJlq0WZkQNORH7TZ6sdksuxlrEXzYHVyJvF8cvu9ksUTaFYsMc5AWe1T_zfJ0?is_search=0&list_name=follow&nt=0
 # 森棋: https://www.douyin.com/user/MS4wLjABAAAAcW1HyIA_Ws6h0033Gxy3CQ0HWcwpw3ZghE_MpNE7u0g?is_search=0&list_name=follow&nt=0
+# Nini: https://www.douyin.com/user/MS4wLjABAAAAuFW9aZJo8BBbcMg_p6Zydn0Nco_nxsiNI4-y8JoTnNx86Ey-Ia_JyWrf2gMdFedx
+# 陈奕诺🍡: https://www.douyin.com/user/MS4wLjABAAAAkPSjLbWC9UuQAg6BmdtMxyWKJ_BRNcjfm658G8woY3D5rjsz5XuW20KgdpKQDh2P

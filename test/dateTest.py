@@ -10,3 +10,4 @@ import datetime
 cursor = 1693652827000
 
 print(datetime.datetime.fromtimestamp(cursor / 1000).strftime('%Y-%m-%d'))
+print("%d test %s hahah " % (2, 1))

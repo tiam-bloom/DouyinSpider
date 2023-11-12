@@ -81,8 +81,8 @@ class Downloader:
             total_length = int(r.headers.get('content-length'))
             size_kb = total_length / 8 / 1024
             # fixme 异步打印的日志会乱序, 有时会先打印文件大小, 再打印进度条
-            logger.info('{}、开始下载： {}，文件大小: {}', self.all_counts, file_name,
-                        (f'{size_kb:.2f}KB' if size_kb < 1024 else f'{size_kb / 1024:.2f}MB'))
+            print('%d、文件名： %s，文件大小: %s' % (self.all_counts, file_name,
+                                                    f'{size_kb:.2f}KB' if size_kb < 1024 else f'{size_kb / 1024:.2f}MB'))
             path = os.path.join(self.save_dir_path, file_name)
             FileUtil.if_not_exists_create_dir(path)
             with open(path, 'wb') as f:
@@ -155,7 +155,6 @@ class Downloader:
         :param aweme: [aweme_list][n] json数据
         :return:
         """
-        self.index += 1
         # 作品名 = 作品序号-作品id-作品描述
         aweme_name = f'{self.index}-{aweme['aweme_id']}-{FileUtil.legalize_file_name(aweme['desc'])}'
         images = aweme['images']
@@ -170,6 +169,8 @@ class Downloader:
         """
         # 遍历每一个视频数据
         for aweme in aweme_list:
+            self.index += 1
+            print(f'开始下载第{self.index}/{len(aweme_list)}个作品')
             if self.download_aweme(aweme):
                 self.ok_counts += 1
             else:
