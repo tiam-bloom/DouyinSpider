@@ -29,6 +29,8 @@
 
 ![image-20231112151517139](http://qiniu.yujing.icu/typora_img/image-20231112151517139.png)
 
+运行效果视频
+> 7.97 qEH:/ 08/24 L@J.II 整了三天终于整出来了(*σ´∀`)σ# 爬虫# python  https://v.douyin.com/iRBCq7E9/ 复制此链接，打开Dou音搜索，直接观看视频！
 
 
 
