@@ -7,18 +7,15 @@
 
 import datetime
 import re
-from urllib.parse import urlencode
 
 import requests
-from v2.signature import Signature
+
+from v2.api.http import (aweme_v1_web, Url)
 from v2.downloader import Downloader
 from v2.log import logger
 
 
 class ReqUserAwemePost:
-    base_url = 'https://www.douyin.com'
-    post_url = '/aweme/v1/web/aweme/post/'
-    url = base_url + post_url
 
     @staticmethod
     def from_url(url):
@@ -40,6 +37,7 @@ class ReqUserAwemePost:
         :param sec_user_id: 用户id
         :param count: 每次请求的数量
         """
+        super().__init__()
         self.sec_user_id = sec_user_id
         self.downloader = Downloader(sec_user_id)
         self.count = count
@@ -53,12 +51,7 @@ class ReqUserAwemePost:
         :return: 返回json数据, 失败返回None
         """
         self.index += 1
-        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
-        ms_token = Signature.gen_ms_token()
         params = (
-            ('device_platform', 'webapp'),
-            ('aid', '6383'),
-            ('channel', 'channel_pc_web'),
             ('sec_user_id', self.sec_user_id),
             ('max_cursor', str(max_cursor)),
             ('locate_query', 'false'),
@@ -68,46 +61,15 @@ class ReqUserAwemePost:
             ('whale_cut_token', ''),
             ('cut_version', '1'),
             ('count', str(self.count)),  # 每次请求的数量
-            ('publish_video_strategy_type', '2'),
-            ('pc_client_type', '1'),
-            ('version_code', '170400'),
-            ('version_name', '17.4.0'),
-            ('cookie_enabled', 'true'),
-            ('screen_width', '2560'),
-            ('screen_height', '1440'),
-            ('browser_language', 'zh-CN'),
-            ('browser_platform', 'Win32'),
-            ('browser_name', 'Chrome'),
-            ('browser_version', '119.0.0.0'),
-            ('browser_online', 'true'),
-            ('engine_name', 'Blink'),
-            ('engine_version', '119.0.0.0'),
-            ('os_name', 'Windows'),
-            ('os_version', '10'),
-            ('cpu_core_num', '16'),
-            ('device_memory', '8'),
-            ('platform', 'PC'),
-            ('downlink', '10'),
-            ('effective_type', '4g'),
-            ('round_trip_time', '50'),
-            ('webid', '7297274756444276239'),
-            ('msToken', ms_token)
         )
-        encode_params = urlencode(params, safe='=')  # safe='=' 保留等号, 避免被编码为%3D
-        url = f'{ReqUserAwemePost.url}?{encode_params}'
-        # 加密url等生成xbogus
-        xbogus = Signature.gen_xbogus(url, user_agent)
-        # 貌似不需要ttwid, 减少一次请求
-        # ttwid = Signature.gen_ttwid()
-        new_url = url + f'&X-Bogus={xbogus}'
         headers = {
-            'referer': f'{ReqUserAwemePost.base_url}/user/{self.sec_user_id}',
-            'user-agent': user_agent,
-            'cookie': f'ttwid=1%7CF6oAfQ2-NDzH4Ma6NR_j4SEAmknHsh_jLTV2F1XAtUE%7C1699029194%7C57185f4dfeca5d3cde14a9b7a10b8a90d6863b3ba92f69834483945e16d9b8e4; '
+            'referer': f'{Url.domain}/user/{self.sec_user_id}',
         }
-        logger.info('第 {} 次请求url: {}', self.index, new_url)
+        logger.info('第 {} 次请求', self.index)
         try:
-            response = requests.get(new_url, headers=headers)
+
+            response = aweme_v1_web.get(Url.aweme_post, params, headers)
+            # response = requests.get(new_url, headers=headers)
         except Exception as e:
             logger.error('请求异常: {}', e)
             # 判断异常类型

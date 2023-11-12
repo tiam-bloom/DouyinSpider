@@ -10,10 +10,8 @@ import execjs
 from urllib.parse import urlparse
 
 import requests
-# import logging
 import os
 
-# logger = logging.getLogger(__name__)
 
 
 def gen_random_str(random_length):

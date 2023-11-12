@@ -436,3 +436,8 @@ header中的referer不同
 再携带参数, 包括msToken(不包括X-bogus), 获取X-bogus和ttwid
 
 发送请求
+
+
+## 地址格式
+用户主页地址: https://www.douyin.com/user/{sec_user_id}
+视频访问地址: https://www.douyin.com/video/{aweme_id}
