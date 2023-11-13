@@ -7,12 +7,16 @@
 import re
 
 from v2.downloader import Downloader
-from v2.api import ReqUserAwemePost
+from v2.api.req_aweme_post import ReqUserAwemePost
+from v2.log import logger
 
 
 def save_user_video(url):
     # 获取sec_user_id
     req = ReqUserAwemePost.from_url(url)
+    if req is None:
+        logger.error('实例化失败, 请检查url是否正确')
+        return
     user_aweme_list = req.req_user_aweme_list()
     # 保存视频
     req.downloader.save_video_aweme_list(user_aweme_list)
@@ -20,8 +24,8 @@ def save_user_video(url):
 
 def main():
     # 获取用户输入 todo 优化输入
-    print(
-        "请输入用户主页链接, 比如: https://www.douyin.com/user/MS4wLjABAAAACV5Em110SiusElwKlIpUd-MRSi8rBYyg0NfpPrqZmykHY8wLPQ8O4pv3wPL6A-oz")
+    print("请输入用户主页链接, "
+          "比如: https://www.douyin.com/user/MS4wLjABAAAACV5Em110SiusElwKlIpUd-MRSi8rBYyg0NfpPrqZmykHY8wLPQ8O4pv3wPL6A-oz")
     while True:
         url = input('请在此后粘贴链接(输入q退出):')
         # 检查输入
@@ -30,6 +34,8 @@ def main():
         elif url == 'q':
             print('退出')
             exit(0)
+        elif re.match(r'https://www.douyin.com/user/[\w-]+', url) is None:
+            print('请输入用户主页链接!, 请重新输入')
         else:
             break
     print('输入正确, 开始下载', url)

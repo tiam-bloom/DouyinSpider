@@ -5,7 +5,6 @@
 # @Project : DouyinSpider
 # @Desc :
 
-import requests
 
 
 

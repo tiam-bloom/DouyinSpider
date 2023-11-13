@@ -124,4 +124,4 @@ class Url:
     hot_search_list = "/hot/search/list/"
 
 
-aweme_v1_web = Http(Url.domain + Url.aweme_v1_web)
+http = Http(Url.domain + Url.aweme_v1_web)
