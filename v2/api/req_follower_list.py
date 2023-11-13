@@ -4,7 +4,8 @@
 # @File : req_follower_list
 # @Project : DouyinSpider
 # @Desc :
-# from v2.downloader import Downloader
+import json
+
 from v2.api.dhttp import (http_aweme_v1_web, Url)
 from v2.log import logger
 
@@ -13,20 +14,22 @@ class ReqFollowerList:
 
     def __init__(self, sec_user_id):
         self.sec_user_id = sec_user_id
+        self.index = 0
 
-    def req_follower_list(self):
+    def req_follower_list(self, offset=0, max_time=0, source_type=2):
         """
         请求粉丝列表
         :return:
         """
+        self.index += 1
         params = (
-            ('user_id', '70886290991'),
+            ('user_id', '70886290991'),  # 传参
             ('sec_user_id', self.sec_user_id),
-            ('offset', '0'),
+            ('offset', str(offset)),
             ('min_time', '0'),
-            ('max_time', '1699779496'),
+            ('max_time', str(max_time)),
             ('count', '20'),
-            ('source_type', '1'),
+            ('source_type', str(source_type)),  # 1表示粉丝列表,
             ('gps_access', '0'),
             ('address_book_access', '0'),
         )
@@ -38,14 +41,39 @@ class ReqFollowerList:
         except Exception as e:
             logger.error('请求异常: {}', e)
             return None
-        return http_aweme_v1_web.res(response)
+        return http_aweme_v1_web.res(response, self.index)
+
+    def req_all_follower_list(self):
+        offset = 0
+        max_time = 0
+        source_type = 2
+        follower_list = []
+        while True:
+            logger.info('正在获取粉丝列表, offset: {}, max_time: {}', offset, max_time)
+            res = self.req_follower_list(offset, max_time, source_type)
+            if res is None:
+                logger.error('请求失败')
+                break
+            has_more = res['has_more']
+            follower_list.extend(res['followers'])
+            total = res['total']
+            logger.info('已获取粉丝列表: {}', total)
+            if not has_more:
+                logger.info('没有更多了')
+                break
+            offset = res['offset']
+            max_time = res['max_time']
+            source_type = 1
+        logger.info('粉丝列表获取完毕, 总粉丝数: {}', len(follower_list))
+        return follower_list
 
 
 def test():
     sec_user_id = 'MS4wLjABAAAAH7XG2XkvkQq8SuAJbN-Km4ecPpyZ3pUI1Yokfw9AWmk'
-    req_follower_list = ReqFollowerList(sec_user_id)
-    follower_list = req_follower_list.req_follower_list()
-    print(follower_list)
+    req = ReqFollowerList(sec_user_id)
+    follower_list = req.req_all_follower_list()
+    with open('./data/all_followers.json', 'w', encoding='utf-8') as f:
+        json.dump(follower_list, f, indent=2, ensure_ascii=False)
 
 
-# test()
+test()
