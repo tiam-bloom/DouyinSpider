@@ -31,7 +31,7 @@ class ReqUserAwemePost:
             return None
         return ReqUserAwemePost(sec_user_id)
 
-    def __init__(self, sec_user_id, count=32):
+    def __init__(self, sec_user_id, count=18):
         """
         请求用户作品相关数据
         :param sec_user_id: 用户id
@@ -61,6 +61,7 @@ class ReqUserAwemePost:
             ('whale_cut_token', ''),
             ('cut_version', '1'),
             ('count', str(self.count)),  # 每次请求的数量
+            ('publish_video_strategy_type', '2'),
         )
         headers = {
             'referer': f'{Url.domain}/user/{self.sec_user_id}',

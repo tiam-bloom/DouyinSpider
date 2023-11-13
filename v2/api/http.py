@@ -12,6 +12,10 @@ from v2.signature import Signature
 
 
 class Http:
+    cookies = {
+        'ttwid': '1%7C7bNwGzlfoxFk0M5A0Ga6bI7jLPpBWLVt2SlW9DnTa9g%7C1699288129%7Ce14c38d31876df442429e626286c276072f7a7a7b5ebe8abfe866fba1c3e950e',
+        'msToken': 'NXDF-irp81mIS3JwAMyk3t4ZtDoqt-YzJFR1XZmJhSv89Rx13d28t9RcvFBZeWDrsPNA_ZITPtuLaVlueyyNT5fdnI958ok78q476kpYcbebQMop-Ek00R3wEsLBCqXRPaQ',
+    }
 
     def __init__(self, base_url):
         self.base_url = base_url
@@ -25,7 +29,6 @@ class Http:
             ('device_platform', 'webapp'),
             ('aid', '6383'),
             ('channel', 'channel_pc_web'),
-            ('publish_video_strategy_type', '2'),
             ('pc_client_type', '1'),
             ('version_code', '170400'),
             ('version_name', '17.4.0'),
