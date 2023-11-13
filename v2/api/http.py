@@ -21,12 +21,10 @@ class Http:
             'cookie': f'ttwid=1%7CF6oAfQ2-NDzH4Ma6NR_j4SEAmknHsh_jLTV2F1XAtUE%7C1699029194%7C57185f4dfeca5d3cde14a9b7a10b8a90d6863b3ba92f69834483945e16d9b8e4; '
         }
         ms_token = Signature.gen_ms_token()
-        self.params1 = (
+        self.params = (
             ('device_platform', 'webapp'),
             ('aid', '6383'),
             ('channel', 'channel_pc_web'),
-        )
-        self.params2 = (
             ('publish_video_strategy_type', '2'),
             ('pc_client_type', '1'),
             ('version_code', '170400'),
@@ -64,14 +62,14 @@ class Http:
         :return:
         """
         # 合并公共参数
-        params = self.params1 + params + self.params2
+        params = self.params + params
         # 编码参数
         encode_params = urlencode(params, safe='=')  # safe='=' 保留等号, 避免被编码为%3D
         # 生成X-Bogus
         new_url = self.base_url + url + '?' + encode_params
-        xbogus = Signature.gen_xbogus(url, self.headers['user-agent'])
+        xbogus = Signature.gen_xbogus(new_url, self.headers['user-agent'])
         # 添加上X-Bogus参数
-        new_url = f'{new_url}&X-Bogus={xbogus}'
+        new_url = new_url + '&X-Bogus=' + xbogus
         # 添加请求头
         self.headers.update(headers)
         # params 参数使用拼接形式, 避免被编码为%3D
