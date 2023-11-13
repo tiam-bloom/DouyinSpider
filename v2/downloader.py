@@ -53,10 +53,10 @@ class Downloader:
     def __init__(self, save_dir, base_dir_path='./data/'):
         path = os.path.abspath(os.path.join(base_dir_path, save_dir))
         # 创建文件夹
-        FileUtil.if_not_exists_create_dir(os.path.join(path, 'json'))
+        FileUtil.if_not_exists_create_dir(path)
         # 下载器保存文件夹路径
         self.save_dir_path = path
-        self.save_json_dir_path = os.path.join(path, 'json')
+        # self.save_json_dir_path = os.path.join(path, 'json')
         # 作品序号
         self.index = 0
         # 成功下载数
@@ -193,7 +193,7 @@ class Downloader:
         :param file_name:
         :return:
         """
-        path = os.path.join(self.save_json_dir_path, file_name + '.json')
+        path = os.path.join(self.save_dir_path, file_name + '.json')
         with open(path, 'w', encoding='utf-8') as f:
             json.dump(json_data, f, indent=2, ensure_ascii=False)
 

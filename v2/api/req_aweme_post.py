@@ -11,7 +11,7 @@ import re
 
 import requests
 
-from v2.api.http import (http, Url)
+from v2.api.dhttp import (http_aweme_v1_web, Url)
 from v2.downloader import Downloader
 from v2.log import logger
 
@@ -69,7 +69,7 @@ class ReqUserAwemePost:
         }
         logger.info('第 {} 次请求', self.index)
         try:
-            response = http.get(Url.aweme_post, params, headers)
+            response = http_aweme_v1_web.get(Url.aweme_post, params, headers)
             # response = requests.get(new_url, headers=headers)
         except Exception as e:
             logger.error('请求异常: {}', e)
@@ -85,15 +85,16 @@ class ReqUserAwemePost:
             else:
                 logger.error('其他异常')
             return None
-        logger.info('本次请求状态码: {}, 返回数据长度: {}', response.status_code, len(response.text))
-        if response.status_code == 200 and len(response.text) > 0:
-            json_data = response.json()
-            logger.info('本次请求到的视频数量: {}', len(json_data['aweme_list']))
-            # 保存json文件做备份
-            date = datetime.datetime.fromtimestamp(int(max_cursor) / 1000).strftime('%Y-%m-%d') if max_cursor > 0 \
-                else datetime.date.today()
-            self.downloader.save_json_file(json_data, str(date))
-            return json_data
+        return http_aweme_v1_web.res(response, self.index)
+        # logger.info('本次请求状态码: {}, 返回数据长度: {}', response.status_code, len(response.text))
+        # if response.status_code == 200 and len(response.text) > 0:
+        #     json_data = response.json()
+        #     logger.info('本次请求到的视频数量: {}', len(json_data['aweme_list']))
+        #     # 保存json文件做备份
+        #     date = datetime.datetime.fromtimestamp(int(max_cursor) / 1000).strftime('%Y-%m-%d') if max_cursor > 0 \
+        #         else datetime.date.today()
+        #     self.downloader.save_json_file(json_data, str(date))
+        #     return json_data
 
     def req_user_aweme_list(self):
         # 统计视频数量
