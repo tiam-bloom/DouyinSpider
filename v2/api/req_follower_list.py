@@ -69,6 +69,7 @@ class ReqFollowerList:
 
 
 def test():
+    user_id = '70886290991'
     sec_user_id = 'MS4wLjABAAAAH7XG2XkvkQq8SuAJbN-Km4ecPpyZ3pUI1Yokfw9AWmk'
     req = ReqFollowerList(sec_user_id)
     follower_list = req.req_all_follower_list()
