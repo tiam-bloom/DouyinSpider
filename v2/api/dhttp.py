@@ -83,6 +83,7 @@ class Http:
         # 添加请求头
         self.headers.update(headers)
         # params 参数使用拼接形式, 避免被编码为%3D
+        logger.info('请求地址: {}', new_url)
         return requests.request(method, new_url, headers=self.headers, **kwargs)
 
     def get(self, url, params, headers, **kwargs):

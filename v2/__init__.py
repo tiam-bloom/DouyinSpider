@@ -19,7 +19,7 @@ def save_user_video(url):
         return
     user_aweme_list = req.req_user_aweme_list()
     # 保存视频
-    # req.downloader.save_video_aweme_list(user_aweme_list)
+    req.downloader.save_video_aweme_list(user_aweme_list)
 
 
 def main():

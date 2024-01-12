@@ -105,12 +105,15 @@ class ReqUserAwemePost:
             res = self.aweme_v1_web_aweme_post(max_cursor, need_time_list)
             if res is None:
                 break
-            has_more = res['has_more']
-            aweme_list = res['aweme_list']
-            user_aweme_list.extend(aweme_list)
-            if has_more == 0:
-                break
-            max_cursor = res['max_cursor']
-            need_time_list = 0
+            try:
+                has_more = res['has_more']
+                aweme_list = res['aweme_list']
+                user_aweme_list.extend(aweme_list)
+                if has_more == 0:
+                    break
+                max_cursor = res['max_cursor']
+                need_time_list = 0
+            except Exception as e:
+                logger.error('res解析异常: {}', e)
         logger.info('请求完成, 获取的视频总数: {}', len(user_aweme_list))
         return user_aweme_list
