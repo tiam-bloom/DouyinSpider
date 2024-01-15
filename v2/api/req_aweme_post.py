@@ -8,6 +8,7 @@
 
 import datetime
 import re
+import time
 
 import requests
 
@@ -103,14 +104,17 @@ class ReqUserAwemePost:
         user_aweme_list = []
         while True:
             res = self.aweme_v1_web_aweme_post(max_cursor, need_time_list)
+            # time.sleep(3)
             if res is None:
                 break
             try:
                 has_more = res['has_more']
                 aweme_list = res['aweme_list']
                 user_aweme_list.extend(aweme_list)
+                # 为0时, 说明没有下一页了, 不再请求
                 if has_more == 0:
                     break
+                # 下一页参数
                 max_cursor = res['max_cursor']
                 need_time_list = 0
             except Exception as e:

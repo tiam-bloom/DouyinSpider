@@ -22,7 +22,7 @@ class Http:
         user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
         cookies = {
             # 登录凭证
-            'sessionid': 'f73bbdf4d086d39742d21042ae244799',
+            'sessionid': 'xxxx',
             # 游客ID, 用于推荐
             'ttwid': '1%7CF6oAfQ2-NDzH4Ma6NR_j4SEAmknHsh_jLTV2F1XAtUE%7C1699029194%7C57185f4dfeca5d3cde14a9b7a10b8a90d6863b3ba92f69834483945e16d9b8e4'
         }

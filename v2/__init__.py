@@ -23,7 +23,7 @@ def save_user_video(url):
 
 
 def main():
-    # 获取用户输入 todo 优化输入
+    # 获取用户输入
     print("请输入用户主页链接, "
           "比如: https://www.douyin.com/user/MS4wLjABAAAACV5Em110SiusElwKlIpUd-MRSi8rBYyg0NfpPrqZmykHY8wLPQ8O4pv3wPL6A-oz")
     while True:
