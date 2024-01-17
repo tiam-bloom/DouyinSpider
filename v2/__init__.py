@@ -38,6 +38,7 @@ def main():
             print('请输入用户主页链接!, 请重新输入')
         else:
             break
+    # todo 剔除参数
     print('输入正确, 开始下载', url)
     save_user_video(url)
 
@@ -51,3 +52,5 @@ if __name__ == '__main__':
 # 森棋: https://www.douyin.com/user/MS4wLjABAAAAcW1HyIA_Ws6h0033Gxy3CQ0HWcwpw3ZghE_MpNE7u0g?is_search=0&list_name=follow&nt=0
 # Nini: https://www.douyin.com/user/MS4wLjABAAAAuFW9aZJo8BBbcMg_p6Zydn0Nco_nxsiNI4-y8JoTnNx86Ey-Ia_JyWrf2gMdFedx
 # 陈奕诺🍡: https://www.douyin.com/user/MS4wLjABAAAAkPSjLbWC9UuQAg6BmdtMxyWKJ_BRNcjfm658G8woY3D5rjsz5XuW20KgdpKQDh2P
+# 渔总up: https://www.douyin.com/user/MS4wLjABAAAArcoz8pyUJSASISQnP_JMfUgNATaCTOJJzQsG6HSzeAU
+# 昱景影视: https://www.douyin.com/user/MS4wLjABAAAAgy0q1SoRu4RouWv803O8t-KtW7LVIc1dRWKTZgeHfO-6Q1-ZcZf6IiqkEBwd6tAi?vid=7320200627093572914

@@ -34,6 +34,14 @@ class Signature:
 
     @staticmethod
     def gen_xbogus(url, user_agent):
+        """
+        生成X-Bogus, 通过 url 比如 https://www.douyin.com/aweme/v1/web/aweme/post/?device_platform=webapp&aid=6383&....(其他一大串参数)
+        ,和UA生成
+        headers 与 cookies 不参与 X-Bogus 生成
+        :param url:
+        :param user_agent:
+        :return:
+        """
         # 解析url参数
         query = urlparse(url).query
         # js算法加密生成 X-bogus, 执行js文件中的sign方法
@@ -44,6 +52,11 @@ class Signature:
 
     @staticmethod
     def gen_ttwid():
+        """
+        生成ttwid
+        fixme ttwid 的更新频率?
+        :return:
+        """
         url = 'https://ttwid.bytedance.com/ttwid/union/register/'
         data = {
             "region": "cn",
@@ -70,3 +83,6 @@ def test():
     print(Signature.gen_ttwid())
 
 # test()
+
+# 1%7C7bNwGzlfoxFk0M5A0Ga6bI7jLPpBWLVt2SlW9DnTa9g%7C1699288129%7Ce14c38d31876df442429e626286c276072f7a7a7b5ebe8abfe866fba1c3e950e
+# 1%7CcBfZs8gcNCYbpScSlcIeCsH8oFRsOi9MAfFrwWd2V18%7C1705382341%7Ca6cff25051a60b433e9b350915b54fd9e0b8fec7d62027d2a04d5048b2650b96
